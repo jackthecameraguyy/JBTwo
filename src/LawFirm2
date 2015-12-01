@@ -9,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.swing.JOptionPane;
 
 /*The implementation class for the JavaBeaner's Law Firm.
@@ -18,8 +21,13 @@ public class LawFirm {
 	
 	public static final int MAXCASES = 1000;
 	public static Case [] cases = new Case[MAXCASES];
+	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
+		    Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 	
-	
+	public static boolean validate(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        return matcher.find();
+		}
 	private static Case addCase(Case [] cases) {
 		Case theCase = new Case();
 		int num = 0;
@@ -107,10 +115,71 @@ public class LawFirm {
 			switch (status) {
 			case 1:
 				theCase = new Accepted(theCase.getCaseNum(), theCase.toString());
+				String plaintiffName = JOptionPane.showInputDialog("Enter plaintiff name");
+				while(plaintiffName.equals("")){
+					plaintiffName = JOptionPane.showInputDialog("You must enter plaintiff name!!");
+				}
+				String email = JOptionPane.showInputDialog("Enter email of plaintiff");
+				validate(email);
+				
+				while(!validate(email)){
+					email = JOptionPane.showInputDialog( "Please enter valid email!!");
+				}
+				String phone = JOptionPane.showInputDialog("Enter plaintiff phone number");
+				String expression = "^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$";
+				CharSequence inputStr = phone;  
+				Pattern pattern = Pattern.compile(expression);  
+				Matcher matcher = pattern.matcher(inputStr);  
+			     // Pattern pattern = Pattern.compile("\\d{3}-\\d{7}");
+			      //Matcher matcher = pattern.matcher(phone);
+			      //System.out.println(matcher.matches());
+				boolean err = false;
+				if(matcher.matches()){
+					err = false;
+				}
+				else{
+					err=true;
+				}
+			      while(err){
+			    	  phone = JOptionPane.showInputDialog( "Phone Number invalid!");
+			      }
+			     		 		
+				theCase.createPlaintiff(plaintiffName, phone, email);
 				setAccepted((Accepted) theCase);
 				break;
 			case 2:  
             	theCase = new Rejected(theCase.getCaseNum(), theCase.toString());
+            	
+            	String name = JOptionPane.showInputDialog("Enter plaintiff name");
+    			while(name.equals("")){
+    				name = JOptionPane.showInputDialog("You must enter plaintiff name!!");
+    			}
+    			String plaintiffEmail = JOptionPane.showInputDialog("Enter email of plaintiff");
+    			validate(plaintiffEmail);
+    			
+    			while(!validate(plaintiffEmail)){
+    				plaintiffEmail = JOptionPane.showInputDialog( "Please enter valid email!!");
+    			}
+    			String plaintiffPhone = JOptionPane.showInputDialog("Enter plaintiff phone number");
+    			
+    			CharSequence inputStr1 = plaintiffPhone;  
+    			Pattern pattern1 = Pattern.compile(expression);  
+    			Matcher matcher1 = pattern.matcher(inputStr1);  
+    		     // Pattern pattern = Pattern.compile("\\d{3}-\\d{7}");
+    		      //Matcher matcher = pattern.matcher(phone);
+    		      //System.out.println(matcher.matches());
+    			boolean err1 = false;
+    			if(matcher.matches()){
+    				err1 = false;
+    			}
+    			else{
+    				err1=true;
+    			}
+    		      while(err1){
+    		    	  plaintiffPhone = JOptionPane.showInputDialog( "Phone Number invalid!");
+    		      }
+    		     		 		
+    			theCase.createPlaintiff(name, plaintiffPhone, plaintiffEmail);
             	setRejected((Rejected) theCase);		
 				break;		
 			case 3:
