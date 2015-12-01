@@ -88,7 +88,7 @@ public class Accepted extends Case {
 	 *The accessor method returns a formatted string 
 	 */
 	public String toString(){
-		return "NumLawyers: " + numLawyers + " Courthouse name:" +courthouseName + "Number of days trial is: " + numDaysTrial;
+		return super.toString() + "\nNumLawyers: " + numLawyers + " Courthouse name:" +courthouseName + "Number of days trial is: " + numDaysTrial;
 	}
 	
 }
