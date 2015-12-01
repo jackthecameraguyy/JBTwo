@@ -13,22 +13,29 @@ public class Accepted extends Case {
 	 * initializes the number of lawyers, courthouse name
 	 * and number of days of the trial.
 	 */
+	
+	
+	public Accepted(int id, String title){
+		super.setCaseNum(id);
+		super.setTitle(title);
+		numLawyers  = 0;
+		courthouseName = "";
+		numDaysTrial = 0;
+	}
+	
 	public Accepted(){
 		super();
 		numLawyers  = 0;
 		courthouseName = "";
 		numDaysTrial = 0;
-      notes = new Note[20];
 		
 	}
 	
-	public void setNotes(String information){
-	   Note note = new Note();
-      note.setNote(information);
-      int n = note.getTotalNotes();
-      notes[n] = note;
+	public void setNotes(){
+		
 	}
 	
+	//hi
 	
 	public Note[] getNotes(){
 		return notes;
@@ -88,7 +95,7 @@ public class Accepted extends Case {
 	 *The accessor method returns a formatted string 
 	 */
 	public String toString(){
-		return super.toString() + "\nNumLawyers: " + numLawyers + " Courthouse name:" +courthouseName + "Number of days trial is: " + numDaysTrial;
+		return super.toString() +" NumLawyers: " + numLawyers + " Courthouse name: " +courthouseName + "Number of days trial is: " + numDaysTrial;
 	}
 	
 }
