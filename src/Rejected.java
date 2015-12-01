@@ -3,6 +3,13 @@ public class Rejected extends Case {
 	
 	private String reason;
 	
+	
+	public Rejected(int id, String title){
+		super.setCaseNum(id);
+		super.setTitle(title);
+		reason="";
+	}
+	
 	/**
 	 * The default constructor that calls the 
 	 * superclass, Case class's default constructor
@@ -32,6 +39,7 @@ public class Rejected extends Case {
 	 * Method returns a formatted string of the rejected reason
 	 */
 	public String toString(){
-		return super.toString() + "\nReason: " + reason;
+		
+		return super.toString()+"Reason: " + reason;
 	}
 }
