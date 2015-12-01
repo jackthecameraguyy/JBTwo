@@ -19,180 +19,6 @@ public class LawFirm {
 	public static final int MAXCASES = 1000;
 	public static Case [] cases = new Case[MAXCASES];
 	
-	public static void main(String[] args) throws FileNotFoundException{
-
-	int choice = 0;
-	String login = "";
-	
-	do {
-		try {
-         		login = showLoginMenu();
-         		System.out.println(login);
-		      	if (login == null){
-		      	choice = (int)(JOptionPane.showConfirmDialog
-			(null, "You have entered an incorrect password"
-			+ " or username. Would you like to try again?", 
-			"JavaBeaners Law Firm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE));
-				if (choice != 0) {
-					JOptionPane.showMessageDialog(null, "Goodbye!", "JavaBeaners Law Firm",
-					JOptionPane.INFORMATION_MESSAGE);
-					break;
-				}
-		      	}
-      		}
-      		catch(NullPointerException e) {
-         		login = "";
-      		}
-	} while (choice == 0 && login.equals(""));
-	//if it is a secretarial type the user can
-	//create new cases, see all cases, search the cases by certain criteria, 
-	//and create text files based on her search results.
-	int option = 0;
-	do {
-		if (login.equals("Secretary")) {
-			option = secretaryMenu();
-			if (option == 5) {
-				option = 9999;
-			}
-		}
-		else {
-			option = adminMenu();
-			if (option == 5) {
-				option = 9999;
-			}
-		} 
-		
-		
-			switch (option) {
-			case 1 : 
-			       int n = cases[0].getTotalCases();
-			       cases[n] = addCase(cases);
-					
-					System.out.println(cases[0].getTotalCases());
-					break;
-			case 2: edit(cases);
-					break;
-			case 3: search();
-					break;
-			case 4: print(cases);
-				break;
-			case 9999:
-				JOptionPane.showMessageDialog(null, "Goodbye!");
-				System.exit(0);
-				
-			default: 
-				JOptionPane.showMessageDialog(null, "Please enter options 1-4 !");
-			}
-	} while( JOptionPane.showConfirmDialog(null, "Continue to the menu?") == JOptionPane.YES_OPTION);
-}
-
-	/**
-	 * This method creates a user object & gets the username & password. 
-	 * @return
-	 */
-	private static String showLoginMenu() {
-		String userName="";
-		String password="";
-		String[] options = {"Try Again", "Quit"};
-		while(true){
-			userName = "";			
-			//gets the user input for the username. 			
-			while (userName.equals("")){
-				userName = JOptionPane.showInputDialog(null, "Please enter your username:", 
-				"JavaBeaners Law Firm", JOptionPane.QUESTION_MESSAGE);
-				if (userName.equals("")){
-					JOptionPane.showMessageDialog(null, "Please enter your username!");
-				}
-			}
-			
-			password = "";			
-			//gets user input for the password
-			while (password.equals("")){
-				password = JOptionPane.showInputDialog(null, "Please enter your password:", 
-				"JavaBeaners Law Firm", JOptionPane.QUESTION_MESSAGE);
-				if (password.equals("")){
-					JOptionPane.showMessageDialog(null, "Please enter your password!");
-				}
-			}
-			
-			if(User.exists(userName, password)){
-				break;
-			}
-			else{
-				int choice = JOptionPane.showOptionDialog(null, "Account not found.  What would you like to do?", "poo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
-				if (choice == 1){
-					System.exit(0);
-				}
-			}
-		}
-		
-		return User.getType();
-	}
-	
-	private static int secretaryMenu() {
-		int choice = 0;
-		boolean error = false;
-		do {
-			try { 
-				choice = Integer.parseInt(JOptionPane.showInputDialog(null, 
-				"Please choose an option from the list:"
-				+ "\n1.Create New Case \n2.Edit Case \n3.Search Cases \n4.Print \n5. Exit", 
-				"JavaBeaners Law Firm", JOptionPane.QUESTION_MESSAGE));
-				error = false;
-				if (choice < 1 || choice > 5) {
-					throw new IndexOutOfBoundsException();
-				}
-			}
-			catch(NumberFormatException e) {
-				JOptionPane.showMessageDialog(null,  "Please enter a valid #", 
-				"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-				error = true;
-			}
-			catch(IndexOutOfBoundsException e) {
-				JOptionPane.showMessageDialog(null,  "Please enter a valid #", 
-				"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-				error = true;
-			}
-			/*catch(NullPointerException e) {
-				error = true;
-				break;
-			}*/
-			} while(error == true);
-			return choice;
-	}
-	
-	
-	private static int adminMenu() {
-		int choice = 0;
-		boolean error = false;
-		do {
-			try { 
-				choice = Integer.parseInt(JOptionPane.showInputDialog(null, 
-				"Please choose an option from the list:"
-				+ "\n1.Edit Case \n2.Search Cases \n3.Print \n4.Exit", 
-				"JavaBeaners Law Firm", JOptionPane.QUESTION_MESSAGE));
-				error = false;
-				if (choice < 1 || choice > 4) {
-					throw new IndexOutOfBoundsException();
-				}
-			}
-			catch(NumberFormatException e) {
-				JOptionPane.showMessageDialog(null,  "Please enter a valid #", 
-				"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-				error = true;
-			}
-			catch(IndexOutOfBoundsException e) {
-				JOptionPane.showMessageDialog(null,  "Please enter a valid #", 
-				"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-				error = true;
-			}
-			catch(NullPointerException e) {
-				return 5;
-			}
-		} while(error == true);
-		return choice+1;
-	}
-	
 	
 	private static Case addCase(Case [] cases) {
 		Case theCase = new Case();
@@ -280,72 +106,13 @@ public class LawFirm {
 			} while(error == true);
 			switch (status) {
 			case 1:
-				theCase = new Accepted();
-				int numLawyers = 0;
-				error = false;
-			do {
-   				try {
-      				numLawyers = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter the number of lawyers.",  
-      				JOptionPane.QUESTION_MESSAGE));
-      				if (numLawyers == 0) {
-         					error = true;
-         					JOptionPane.showMessageDialog(null,  "Please enter a valid number of lawyers", 
-		      		"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-      				}
-   				}
-   				catch (NumberFormatException e) {
-      				JOptionPane.showMessageDialog(null,  "Please enter a valid number of lawyers", 
-			"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-      				error = true;
-   				}
-			} while(error == true);
-			int trialDays = 0;
-		do {
-   			try {
-      			trialDays = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter the number of trial days.",  
-      			JOptionPane.QUESTION_MESSAGE));
-      			if (trialDays == 0 || trialDays > 365) {
-         				error = true;
-         				JOptionPane.showMessageDialog(null,  "Please enter a valid number of trial days", 
-			"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-      			}
-   			}
-   			catch (NumberFormatException e) {
-      			JOptionPane.showMessageDialog(null,  "Please enter a valid number of trial days", 
-      						"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-      			error = true;
-   			}
-		} while(error == true);
-		((Accepted) theCase).setNumDaysTrial(trialDays);
-		String court = "";
-do {
-   court = JOptionPane.showInputDialog(null, "Please enter the number of trial days.",  
-   JOptionPane.QUESTION_MESSAGE);
-   error = false;
-   if (court.equals("")) {
-      error = true;
-      JOptionPane.showMessageDialog(null,  "Please enter a valid number of trial days", 
-		   "JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-   }
-} while(error == true);
-((Accepted) theCase).setCourthouseName(court);
-	break;
-				case 2:  
-            				theCase = new Rejected();
-            				JOptionPane.showMessageDialog(null,  "Please enter a valid option", 
-					"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-            				String reason = "";
-            				do {
-               					reason = JOptionPane.showInputDialog(null, "Please enter the reason the case was rejected.",  
-               					JOptionPane.QUESTION_MESSAGE);
-               					if (reason.equals("")) {
-                  					JOptionPane.showMessageDialog(null,  "Please enter a valid rejected reason", 
-							"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
-               					}
-            				} while( reason.equals(""));
-            				((Rejected) theCase).setReason(reason);
-					break;
-				
+				theCase = new Accepted(theCase.getCaseNum(), theCase.toString());
+				setAccepted((Accepted) theCase);
+				break;
+			case 2:  
+            	theCase = new Rejected(theCase.getCaseNum(), theCase.toString());
+            	setRejected((Rejected) theCase);		
+				break;		
 			case 3:
 				theCase = (Case)theCase;
 				break;
@@ -353,85 +120,292 @@ do {
 		}
 		return theCase;
 	}
-	
-	
-		public static void edit(Case [] cases) {
-			String message = "Which case number's status would you like to edit? \n";
-			LinkedList<Case> listPend= new LinkedList<Case>();
-			try{
-				for (Case aCase : cases){
-					if (aCase == null) continue;
-					if(!(aCase instanceof Accepted) && !(aCase instanceof Rejected)){
-						listPend.add(aCase);
-					}
-				}
-			}catch (NullPointerException e){
-				JOptionPane.showMessageDialog(null, "No cases are available for changes.");
-				return;
-			}
-			
-			if (listPend.size() <= 0){
-				JOptionPane.showMessageDialog(null, "No cases are available for changes.");
-				return;
-			}
-			
-			System.out.println(listPend.size( ));
-			for (Case aCase : listPend){
-				System.out.println(aCase.toString());
-			}
-			
-			String[] options = new String[listPend.size()];
-			message += String.format("%8s%32s\n", "Case Num",  "Case Name");
-			for (int i = 0; i < listPend.size(); i++){
-				options[i] = ((Integer) listPend.get(i).getCaseNum()).toString();
-				message += String.format("%8d%32s\n", listPend.get(i).getCaseNum(),  listPend.get(i).getTitle());
-			}
-			
-			String option = (String) JOptionPane.showInputDialog(null, message, "Select a Case",  JOptionPane.QUESTION_MESSAGE, null, options, null);
 
-			Case selected = null;
-			for (Case aCase : listPend){
-				if(Integer.parseInt(option) == (aCase.getCaseNum())){			
-					selected = aCase;
-					break;
+	private static int adminMenu() {
+		int choice = 0;
+		boolean error = false;
+		do {
+			try { 
+				choice = Integer.parseInt(JOptionPane.showInputDialog(null, 
+				"Please choose an option from the list:"
+				+ "\n1.Edit Case \n2.Search Cases \n3.Print \n4.Exit", 
+				"JavaBeaners Law Firm", JOptionPane.QUESTION_MESSAGE));
+				error = false;
+				if (choice < 1 || choice > 4) {
+					throw new IndexOutOfBoundsException();
 				}
 			}
-			
-			String[] statuses = {"Accepted", "Rejected", "Cancel"};
-			int status = JOptionPane.showOptionDialog(null, "What is the new status of this case?", "Set Status", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, statuses, null);
-			switch (status){
-			case 0:
-				JOptionPane.showMessageDialog(null, "Status changed to 'Accepted'.");
-				selected = new Accepted(selected.getCaseNum(), selected.getTitle());
-				setAccepted((Accepted)selected);
-				break;
-			case 1:
-				JOptionPane.showMessageDialog(null, "Status changed to 'Rejected'.");
-				selected = new Rejected(selected.getCaseNum(), selected.getTitle());
-				setRejected((Rejected) selected);
-				break;
-			default:
-				JOptionPane.showMessageDialog(null, "Status change cancelled.");
-				break;
+			catch(NumberFormatException e) {
+				JOptionPane.showMessageDialog(null,  "Please enter a valid #", 
+				"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
+				error = true;
 			}
-			
-			for (int i = 0; i < cases.length; i++){
-				if (cases[i].getCaseNum() == selected.getCaseNum()){
-					cases[i] = selected;
-					break;
+			catch(IndexOutOfBoundsException e) {
+				JOptionPane.showMessageDialog(null,  "Please enter a valid #", 
+				"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
+				error = true;
+			}
+			catch(NullPointerException e) {
+				return 5;
+			}
+		} while(error == true);
+		return choice+1;
+	}
+	
+	public static void edit(Case [] cases) {
+		String message = "Which case number's status would you like to edit? \n";
+		LinkedList<Case> listPend= new LinkedList<Case>();
+		try{
+			for (Case aCase : cases){
+				if (aCase == null) continue;
+				if(!(aCase instanceof Accepted) && !(aCase instanceof Rejected)){
+					listPend.add(aCase);
 				}
 			}
-			
+		}catch (NullPointerException e){
+			JOptionPane.showMessageDialog(null, "No cases are available for changes.");
+			return;
 		}
 		
+		if (listPend.size() <= 0){
+			JOptionPane.showMessageDialog(null, "No cases are available for changes.");
+			return;
+		}
 		
-		public static void setRejected(Rejected aCase){
-			String reason = "";
-			while(reason.equals("")){
-				reason = JOptionPane.showInputDialog(null, "Please enter the reason the case was rejected.", JOptionPane.QUESTION_MESSAGE);
+		System.out.println(listPend.size( ));
+		for (Case aCase : listPend){
+			System.out.println(aCase.toString());
+		}
+		
+		String[] options = new String[listPend.size()];
+		message += String.format("%8s%32s\n", "Case Num",  "Case Name");
+		for (int i = 0; i < listPend.size(); i++){
+			options[i] = ((Integer) listPend.get(i).getCaseNum()).toString();
+			message += String.format("%8d%32s\n", listPend.get(i).getCaseNum(),  listPend.get(i).getTitle());
+		}
+		
+		String option = (String) JOptionPane.showInputDialog(null, message, "Select a Case",  JOptionPane.QUESTION_MESSAGE, null, options, null);
+
+		Case selected = null;
+		for (Case aCase : listPend){
+			if(Integer.parseInt(option) == (aCase.getCaseNum())){			
+				selected = aCase;
+				break;
 			}
-			aCase.setReason(reason);
+		}
+		
+		String[] statuses = {"Accepted", "Rejected", "Cancel"};
+		int status = JOptionPane.showOptionDialog(null, "What is the new status of this case?", "Set Status", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, statuses, null);
+		switch (status){
+		case 0:
+			JOptionPane.showMessageDialog(null, "Status changed to 'Accepted'.");
+			selected = new Accepted(selected.getCaseNum(), selected.getTitle());
+			setAccepted((Accepted)selected);
+			break;
+		case 1:
+			JOptionPane.showMessageDialog(null, "Status changed to 'Rejected'.");
+			selected = new Rejected(selected.getCaseNum(), selected.getTitle());
+			setRejected((Rejected) selected);
+			break;
+		default:
+			JOptionPane.showMessageDialog(null, "Status change cancelled.");
+			break;
+		}
+		
+		for (int i = 0; i < cases.length; i++){
+			if (cases[i].getCaseNum() == selected.getCaseNum()){
+				cases[i] = selected;
+				break;
+			}
+		}
+		
+	}
+	
+	
+	public static void main(String[] args) throws FileNotFoundException{
+
+	int choice = 0;
+	String login = "";
+	
+	do {
+		try {
+         		login = showLoginMenu();
+         		System.out.println(login);
+		      	if (login == null){
+		      	choice = (int)(JOptionPane.showConfirmDialog
+			(null, "You have entered an incorrect password"
+			+ " or username. Would you like to try again?", 
+			"JavaBeaners Law Firm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE));
+				if (choice != 0) {
+					JOptionPane.showMessageDialog(null, "Goodbye!", "JavaBeaners Law Firm",
+					JOptionPane.INFORMATION_MESSAGE);
+					break;
+				}
+		      	}
+      		}
+      		catch(NullPointerException e) {
+         		login = "";
+      		}
+	} while (choice == 0 && login.equals(""));
+	//if it is a secretarial type the user can
+	//create new cases, see all cases, search the cases by certain criteria, 
+	//and create text files based on her search results.
+	int option = 0;
+	do {
+		if (login.equals("Secretary")) {
+			option = secretaryMenu();
+			if (option == 5) {
+				option = 9999;
+			}
+		}
+		else {
+			option = adminMenu();
+			if (option == 5) {
+				option = 9999;
+			}
+		} 
+		
+		
+			switch (option) {
+			case 1 : 
+			       int n = cases[0].getTotalCases();
+			       cases[n] = addCase(cases);
+					
+					System.out.println(cases[0].getTotalCases());
+					break;
+			case 2: edit(cases);
+					break;
+			case 3: search();
+					break;
+			case 4: print(cases);
+				break;
+			case 9999:
+				JOptionPane.showMessageDialog(null, "Goodbye!");
+				System.exit(0);
+				
+			default: 
+				JOptionPane.showMessageDialog(null, "Please enter options 1-4 !");
+			}
+	} while( JOptionPane.showConfirmDialog(null, "Continue to the menu?") == JOptionPane.YES_OPTION);
+}
+	
+	
+	public static void print(Case [] cases) throws FileNotFoundException {
+	
+	String output = "";
+	for (Case aCase: cases){
+		if (aCase!=null){
+			output+= aCase.toString() + "\n";			
+		}
+	}
+	
+	String filename = "./src/allCases.txt";
+	
+	PrintWriter pw = new PrintWriter(new FileOutputStream(filename));
+	
+	pw.write(output);
+	
+	pw.close();
+	JOptionPane.showMessageDialog(null,output);
+	JOptionPane.showMessageDialog(null, "The contents of the cases have been added to a file - allCases.txt!");
+	
+	
+}
+	
+		public static void search (){
+			String searchResult = "";
+			String response = "";
+			String[] options = {"Case Number", "Plaintiff Name", "Lawyer's Name"};
+			int selection = JOptionPane.showOptionDialog(null, "Select criteria to search by: ", null, 0, 3, null, options, null);
+			switch(selection){
+			case 0:
+				//selected Case Number
+				int caseNum = 0;
+				while(true){
+					response = JOptionPane.showInputDialog("Please enter the case number for the case you would like to find: ");
+					try{
+						caseNum = Integer.parseInt(response);
+						break;
+					}catch (NumberFormatException e){
+						JOptionPane.showMessageDialog(null, "Case number must be in numberic form!");
+					}
+				}
+				for (int i = 0; i < Case.getTotalCases(); i++){
+					if (cases[i].getCaseNum() == caseNum){
+						searchResult = cases[i].toString();
+						break;
+					}
+				}
+				break;
+			case 1:
+				//selected Plaintiff Name
+				response = JOptionPane.showInputDialog("Please enter the name of the plaintiff you wish to find cases for: ");
+				for (int i = 0; i < Case.getTotalCases(); i++){
+					if (((cases[i].getPlaintiff()).getName()).equalsIgnoreCase(response.trim())){
+						searchResult += cases[i].toString() + "\n";
+					}
+				}
+				break;
+			case 2:
+				//selected Lawyer's Name
+				response = JOptionPane.showInputDialog("Please enter the name of Lawyer you wish to find notes for: ");
+				for (int i = 0; i < Case.getTotalCases(); i++){
+		        
+					if (cases[i] instanceof Accepted){
+						Accepted aCase = (Accepted) cases[i];
+						for(int z = 0; z < aCase.getNumLawyers(); z++){
+							for (Note note : aCase.getNotes()){
+								if(note.getLawyer().equalsIgnoreCase(response)){
+									searchResult += note.toString() + "\n";
+								}
+							}
+						}					
+					}
+				}
+				break;
+			default:
+				//selected x button
+				return;
+			}
 			
+			if (searchResult.equals("")){
+				System.out.println("No matches found!");
+			}else{
+				System.out.println(searchResult);
+			}
+		}
+	
+	
+		private static int secretaryMenu() {
+			int choice = 0;
+			boolean error = false;
+			do {
+				try { 
+					choice = Integer.parseInt(JOptionPane.showInputDialog(null, 
+					"Please choose an option from the list:"
+					+ "\n1.Create New Case \n2.Edit Case \n3.Search Cases \n4.Print \n5. Exit", 
+					"JavaBeaners Law Firm", JOptionPane.QUESTION_MESSAGE));
+					error = false;
+					if (choice < 1 || choice > 5) {
+						throw new IndexOutOfBoundsException();
+					}
+				}
+				catch(NumberFormatException e) {
+					JOptionPane.showMessageDialog(null,  "Please enter a valid #", 
+					"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
+					error = true;
+				}
+				catch(IndexOutOfBoundsException e) {
+					JOptionPane.showMessageDialog(null,  "Please enter a valid #", 
+					"JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
+					error = true;
+				}
+				/*catch(NullPointerException e) {
+					error = true;
+					break;
+				}*/
+				} while(error == true);
+				return choice;
 		}
 		
 		
@@ -474,91 +448,59 @@ do {
 			}
 			aCase.setCourthouseName(court);
 		}
+			
 		
 		
 		
-	public static void search (){
-		String searchResult = "";
-		String response = "";
-		String[] options = {"Case Number", "Plaintiff Name", "Lawyer's Name"};
-		int selection = JOptionPane.showOptionDialog(null, "Select criteria to search by: ", null, 0, 3, null, options, null);
-		switch(selection){
-		case 0:
-			//selected Case Number
-			int caseNum = 0;
-			while(true){
-				response = JOptionPane.showInputDialog("Please enter the case number for the case you would like to find: ");
-				try{
-					caseNum = Integer.parseInt(response);
-					break;
-				}catch (NumberFormatException e){
-					JOptionPane.showMessageDialog(null, "Case number must be in numberic form!");
-				}
-			}
-			for (int i = 0; i < Case.getTotalCases(); i++){
-				if (cases[i].getCaseNum() == caseNum){
-					searchResult = cases[i].toString();
-					break;
-				}
-			}
-			break;
-		case 1:
-			//selected Plaintiff Name
-			response = JOptionPane.showInputDialog("Please enter the name of the plaintiff you wish to find cases for: ");
-			for (int i = 0; i < Case.getTotalCases(); i++){
-				if (((cases[i].getPlaintiff()).getName()).equalsIgnoreCase(response.trim())){
-					searchResult += cases[i].toString() + "\n";
-				}
-			}
-			break;
-		case 2:
-			//selected Lawyer's Name
-			response = JOptionPane.showInputDialog("Please enter the name of Lawyer you wish to find notes for: ");
-			for (int i = 0; i < Case.getTotalCases(); i++){
-            
-				if (cases[i] instanceof Accepted){
-					Accepted aCase = (Accepted) cases[i];
-					for(int z = 0; z < aCase.getNumLawyers(); z++){
-						for (Note note : aCase.getNotes()){
-							if(note.getLawyer().equalsIgnoreCase(response)){
-								searchResult += note.toString() + "\n";
-							}
-						}
-					}					
-				}
-			}
-			break;
-		default:
-			//selected x button
-			return;
+	public static void setRejected(Rejected aCase){
+		String reason = "";
+		while(reason.equals("")){
+			reason = JOptionPane.showInputDialog(null, "Please enter the reason the case was rejected.", JOptionPane.QUESTION_MESSAGE);
 		}
+		aCase.setReason(reason);
 		
-		if (searchResult.equals("")){
-			System.out.println("No matches found!");
-		}else{
-			System.out.println(searchResult);
-		}
 	}
 
-		public static void print(Case [] cases) throws FileNotFoundException {
-		
-		String output = "";
-		for (Case aCase: cases){
-			if (aCase!=null){
-				output+= aCase.toString() + "\n";			
+		/**
+		 * This method creates a user object & gets the username & password. 
+		 * @return
+		 */
+		private static String showLoginMenu() {
+			String userName="";
+			String password="";
+			String[] options = {"Try Again", "Quit"};
+			while(true){
+				userName = "";			
+				//gets the user input for the username. 			
+				while (userName.equals("")){
+					userName = JOptionPane.showInputDialog(null, "Please enter your username:", 
+					"JavaBeaners Law Firm", JOptionPane.QUESTION_MESSAGE);
+					if (userName.equals("")){
+						JOptionPane.showMessageDialog(null, "Please enter your username!");
+					}
+				}
+				
+				password = "";			
+				//gets user input for the password
+				while (password.equals("")){
+					password = JOptionPane.showInputDialog(null, "Please enter your password:", 
+					"JavaBeaners Law Firm", JOptionPane.QUESTION_MESSAGE);
+					if (password.equals("")){
+						JOptionPane.showMessageDialog(null, "Please enter your password!");
+					}
+				}
+				
+				if(User.exists(userName, password)){
+					break;
+				}
+				else{
+					int choice = JOptionPane.showOptionDialog(null, "Account not found.  What would you like to do?", "poo", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+					if (choice == 1){
+						System.exit(0);
+					}
+				}
 			}
+			
+			return User.getType();
 		}
-		
-		String filename = "./src/allCases.txt";
-		
-		PrintWriter pw = new PrintWriter(new FileOutputStream(filename));
-		
-		pw.write(output);
-		
-		pw.close();
-		JOptionPane.showMessageDialog(null,output);
-		JOptionPane.showMessageDialog(null, "The contents of the cases have been added to a file - allCases.txt!");
-		
-		
-	}
 }
