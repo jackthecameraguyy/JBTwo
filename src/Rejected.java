@@ -2,13 +2,18 @@
 public class Rejected extends Case {
 	
 	private String reason;
-	
+	private Plaintiff plaintiff;
 	
 	public Rejected(int id, String title){
 		super.setCaseNum(id);
 		super.setTitle(title);
 		reason="";
 	}
+   
+   public void createPlaintiff(String name, String phone, String email) {
+      this.plaintiff = new Plaintiff(name, phone, email);
+   }
+
 	
 	/**
 	 * The default constructor that calls the 
