@@ -358,11 +358,28 @@ do {
 		public static void edit(Case [] cases) {
 			String message = "Which case number's status would you like to edit? \n";
 			LinkedList<Case> listPend= new LinkedList<Case>();
-			for (Case aCase : cases){
-				if(aCase instanceof Case){
-					listPend.add(aCase);
+			try{
+				for (Case aCase : cases){
+					if (aCase == null) continue;
+					if(!(aCase instanceof Accepted) && !(aCase instanceof Rejected)){
+						listPend.add(aCase);
+					}
 				}
+			}catch (NullPointerException e){
+				JOptionPane.showMessageDialog(null, "No cases are available for changes.");
+				return;
 			}
+			
+			if (listPend.size() <= 0){
+				JOptionPane.showMessageDialog(null, "No cases are available for changes.");
+				return;
+			}
+			
+			System.out.println(listPend.size( ));
+			for (Case aCase : listPend){
+				System.out.println(aCase.toString());
+			}
+			
 			String[] options = new String[listPend.size()];
 			message += String.format("%8s%32s\n", "Case Num",  "Case Name");
 			for (int i = 0; i < listPend.size(); i++){
@@ -371,7 +388,7 @@ do {
 			}
 			
 			String option = (String) JOptionPane.showInputDialog(null, message, "Select a Case",  JOptionPane.QUESTION_MESSAGE, null, options, null);
-			
+
 			Case selected = null;
 			for (Case aCase : listPend){
 				if(Integer.parseInt(option) == (aCase.getCaseNum())){			
@@ -385,20 +402,81 @@ do {
 			switch (status){
 			case 0:
 				JOptionPane.showMessageDialog(null, "Status changed to 'Accepted'.");
-				//cast to accepted
-				//setAccepted();
+				selected = new Accepted(selected.getCaseNum(), selected.getTitle());
+				setAccepted((Accepted)selected);
 				break;
 			case 1:
 				JOptionPane.showMessageDialog(null, "Status changed to 'Rejected'.");
-				//cast to rejected
-				//setRejected();
+				selected = new Rejected(selected.getCaseNum(), selected.getTitle());
+				setRejected((Rejected) selected);
 				break;
 			default:
 				JOptionPane.showMessageDialog(null, "Status change cancelled.");
 				break;
 			}
-
+			
+			for (int i = 0; i < cases.length; i++){
+				if (cases[i].getCaseNum() == selected.getCaseNum()){
+					cases[i] = selected;
+					break;
+				}
+			}
+			
 		}
+		
+		
+		public static void setRejected(Rejected aCase){
+			String reason = "";
+			while(reason.equals("")){
+				reason = JOptionPane.showInputDialog(null, "Please enter the reason the case was rejected.", JOptionPane.QUESTION_MESSAGE);
+			}
+			aCase.setReason(reason);
+			
+		}
+		
+		
+		public static void setAccepted(Accepted aCase){;
+			int numLawyers = 0;
+  			while(true){
+  				try{
+					numLawyers = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter the number of lawyers.",  JOptionPane.QUESTION_MESSAGE));
+		  			if (numLawyers <= 0) {
+		     					JOptionPane.showMessageDialog(null,  "Please enter a valid number of lawyers", "JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
+		  			}
+		  			else{
+		  				break;
+		  			}
+  				}catch (NumberFormatException e){
+  					JOptionPane.showMessageDialog(null, "Please enter a number.");
+  				}
+			}
+  			aCase.setNumLawyers(numLawyers);
+  			
+			int trialDays = 0;
+			while(true){
+					try{
+						trialDays = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter the number of trial days.",  JOptionPane.QUESTION_MESSAGE));
+						if (trialDays <= 0 || trialDays > 365) {
+		     					JOptionPane.showMessageDialog(null,  "Please enter a valid number of lawyers", "JavaBeaners Law Firm", JOptionPane.ERROR_MESSAGE);
+						}
+			  			else{
+			  				break;
+			  			}
+					}catch (NumberFormatException e){
+						JOptionPane.showMessageDialog(null, "Please enter a number.");
+					}
+			}
+			aCase.setNumDaysTrial(trialDays);
+			
+			String court = "";
+			while(court.equals("")){
+				court = JOptionPane.showInputDialog(null, "Please enter the name of the courthouse.",  JOptionPane.QUESTION_MESSAGE);
+			}
+			aCase.setCourthouseName(court);
+		}
+		
+		
+		
 	public static void search (){
 		String searchResult = "";
 		String response = "";
