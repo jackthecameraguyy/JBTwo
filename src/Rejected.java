@@ -32,6 +32,6 @@ public class Rejected extends Case {
 	 * Method returns a formatted string of the rejected reason
 	 */
 	public String toString(){
-		return "Reason: " + reason;
+		return super.toString() + "\nReason: " + reason;
 	}
 }
