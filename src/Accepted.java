@@ -5,7 +5,7 @@ public class Accepted extends Case {
 	private String courthouseName;
 	private int numDaysTrial;
 	private Note[] notes;
-	
+	private Plaintiff plaintiff;
 	
 	/**
 	 * The default constructor for accepted cases
@@ -31,6 +31,11 @@ public class Accepted extends Case {
 		
 	}
 	
+   public void createPlaintiff(String name, String phone, String email) {
+      this.plaintiff = new Plaintiff(name, phone, email);
+   }
+
+   
 	public void setNotes(){
 		
 	}
