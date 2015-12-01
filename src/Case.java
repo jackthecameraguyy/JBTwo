@@ -3,7 +3,6 @@ public class Case {
 	//initialize variables
 	private int caseNumber;
 	private String title;
-	private String status;
 	private static int totalCases;
 	private Plaintiff plaintiff;
 	
@@ -11,9 +10,7 @@ public class Case {
 	public Case(){
 		caseNumber = 0;
 		title = "";
-		status = "";
 		totalCases++;
-		
 	}
 	
 	/**	 
@@ -23,7 +20,10 @@ public class Case {
 		caseNumber = caseNum;
 	}
 	
-	/**
+   public void createPlaintiff(String name, String phone, String email) {
+      plaintiff = new Plaintiff(name, phone, email);
+   }
+   	/**
 	 * 
 	 * @param title
 	 */
@@ -43,14 +43,6 @@ public class Case {
 		
 	}
 	
-	//set the status
-	/**
-	 * 
-	 * @param status
-	 */
-	public void setStatus(String status){
-		this.status = status;
-	}
 	//get casenumber
 	public int getCaseNum(){
 		return caseNumber;
@@ -72,12 +64,8 @@ public class Case {
 		return plaintiff;
 	}
 	
-	
-	public String getStatus(){
-		return status;
-	}
 	public String toString(){
-		return "Case Number:" + caseNumber + "Status: " + status + " Title: " + title ;
+		return "Case Number:" + caseNumber + " Title: " + title ;
 	}
 	
 	
